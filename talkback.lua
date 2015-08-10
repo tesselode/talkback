@@ -16,8 +16,25 @@ function Conversation:listen(s, f)
   return listener
 end
 
+function Conversation:group(...)
+  local group = {isGroup = true, listeners = {}}
+  local args = {...}
+  for i = 1, #args, 2 do
+    table.insert(group.listeners, self:listen(args[i], args[i + 1]))
+  end
+  return group
+end
+
 function Conversation:stopListening(listener)
-  removeByValue(self.listeners, listener)
+  if listener.isGroup then
+    --remove groups of listeners
+    for i = 1, #listener.listeners do
+      removeByValue(self.listeners, listener.listeners[i])
+    end
+  else
+    --remove single listeners
+    removeByValue(self.listeners, listener)
+  end
 end
 
 function Conversation:say(s, ...)
