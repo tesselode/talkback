@@ -11,6 +11,8 @@ local Conversation = {}
 Conversation.__index = Conversation
 
 function Conversation:listen(s, f)
+  assert(type(f) == 'function', 'f should be a function')
+
   local listener = {s = s, f = f}
   table.insert(self.listeners, listener)
   return listener
