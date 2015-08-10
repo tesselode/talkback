@@ -44,9 +44,9 @@ function Conversation:say(s, ...)
   for i = 1, #self.listeners do
     local listener = self.listeners[i]
     if s == listener.s then
-      local returnedValue = listener.f(...)
-      if returnedValue then
-        table.insert(returned, returnedValue)
+      local returnedValues = {listener.f(...)}
+      for j = 1, #returnedValues do
+        table.insert(returned, returnedValues[j])
       end
     end
   end
