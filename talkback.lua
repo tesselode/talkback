@@ -1,3 +1,12 @@
+local function removeByValue(t, value)
+  for i = #t, 1, -1 do
+    if t[i] == value then
+      table.remove(t, i)
+      break
+    end
+  end
+end
+
 local Conversation = {}
 Conversation.__index = Conversation
 
@@ -5,6 +14,10 @@ function Conversation:listen(s, f)
   local listener = {s = s, f = f}
   table.insert(self.listeners, listener)
   return listener
+end
+
+function Conversation:stopListening(listener)
+  removeByValue(self.listeners, listener)
 end
 
 function Conversation:say(s, ...)

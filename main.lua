@@ -2,9 +2,10 @@ function love.load()
   talkback = require 'talkback'
   conversation = talkback.new()
 
-  conversation:listen('quit', function(arbitrary)
+  quitListener = conversation:listen('quit', function(arbitrary)
     return arbitrary + 2
   end)
+  conversation:stopListening(quitListener)
 end
 
 function love.keypressed(key)
