@@ -83,8 +83,6 @@ function Conversation:say(s, ...)
   return unpack(returned)
 end
 
-local talkback = {}
-
 function talkback.new()
   local conversation = setmetatable({}, Conversation)
   conversation.listeners = {}
