@@ -34,15 +34,15 @@ assert(not (d or e or f),
   'No more values should be passed since the listeners should be disabled')
 
 --listener grouping
-group = conversation:group(
-  'set arbitrary number', function(n)
-    arbitraryNumber = n
-    return n, n + 2
-  end,
-  'set arbitrary number', function(n)
-    return n * 2
-  end
-)
+group = conversation:newGroup()
+group:listen('set arbitrary number', function(n)
+  arbitraryNumber = n
+  return n, n + 2
+end)
+group:listen('set arbitrary number', function(n)
+  return n * 2
+end)
+
 a, b, c = conversation:say('set arbitrary number', 10)
 assert(a == 10 and b == 12 and c == 20,
   'Listeners created as groups should work the same way as listeners created individually')

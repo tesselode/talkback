@@ -46,12 +46,14 @@ function Conversation:listen(s, f)
   return listener
 end
 
-function Conversation:group(...)
+function Conversation:newGroup(...)
   local group = {isGroup = true, listeners = {}}
-  local args = {...}
-  for i = 1, #args, 2 do
-    table.insert(group.listeners, self:listen(args[i], args[i + 1]))
+
+  function group.listen(g, s, f)
+    assert(type(f) == 'function', 'f should be a function')
+    table.insert(g.listeners, self:listen(s, f))
   end
+
   return group
 end
 
