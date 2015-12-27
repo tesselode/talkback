@@ -77,20 +77,18 @@ conversation:stopListening(listener)
 Disables the listener. The listener's function will no longer be called when a signal is emitted.
 - `listener` is the handle of the listener to disable.
 
-### Grouping
-You can create listeners as a group:
+### Listener groups
+You can create groups that hold multiple listeners:
 ```lua
-group = conversation:group(...)
+group = conversation:newGroup()
+group:listen(s, f)
 ```
-
-- `...` is a list of signals and functions to use for each listener.
 
 An example usage might look something like this:
 ```lua
-group = conversation.group(
-  'player shoot', shoot,
-  'player move', move
-)
+group = conversation:newGroup()
+group:listen('player shoot', shoot)
+group:listen('player move', move)
 ```
 
 This is useful because later you can disable all of the listeners in the group at once with the stopListening function:
