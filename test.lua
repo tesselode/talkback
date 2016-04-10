@@ -18,6 +18,9 @@ end)
 anotherListener = conversation:listen('set arbitrary number', function(n)
   return n * 2
 end)
+notUsedListener = conversation:listen('not called', function(n)
+  assert(false, 'I should not be called')
+end)
 a, b, c = conversation:say('set arbitrary number', 5)
 
 assert(arbitraryNumber == 5,
@@ -28,6 +31,7 @@ assert(a == 5 and b == 7 and c == 10,
 --stop listening function
 conversation:stopListening(setNumberListener)
 conversation:stopListening(anotherListener)
+conversation:stopListening(notUsedListener)
 d, e, f = conversation:say('set arbitrary number', 7)
 
 assert(not (d or e or f),
@@ -41,6 +45,9 @@ group:listen('set arbitrary number', function(n)
 end)
 group:listen('set arbitrary number', function(n)
   return n * 2
+end)
+group:listen('not called', function(n)
+  assert(false, 'I should not be called')
 end)
 
 a, b, c = conversation:say('set arbitrary number', 10)
