@@ -40,6 +40,7 @@ local Conversation = {}
 Conversation.__index = Conversation
 
 function Conversation:listen(s, f)
+  assert(s, 's must not be a nil value')
   assert(type(f) == 'function', 'f should be a function')
 
   local listener = {s = s, f = f}
