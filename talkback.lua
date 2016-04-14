@@ -1,5 +1,5 @@
 local talkback = {
-  _VERSION     = 'Talkback v1.0',
+  _VERSION     = 'Talkback v1.0.1',
   _DESCRIPTION = 'A tiny observer pattern library for Lua',
   _URL         = 'https://github.com/tesselode/talkback',
   _LICENSE     = [[
