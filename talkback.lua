@@ -27,6 +27,8 @@ local talkback = {
   ]]
 }
 
+local unpack = unpack or table.unpack
+
 local function removeByValue(t, value)
   for i = #t, 1, -1 do
     if t[i] == value then
