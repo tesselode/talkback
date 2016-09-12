@@ -1,9 +1,11 @@
 Talkback
-========
-Talkback is a tiny observer pattern library for Lua. It allows you to automatically call a function whenever a signal is emitted, making it easy to have different parts of your code communicate with each other without creating spaghetti code. Talkback has a unique feature: listeners (functions tied to a signal) can pass values back to the object that sent the signal.
+--------
+**Talkback** is a tiny observer pattern library for Lua. It allows you to associate functions with messages that you can send from anywhere in your code, allowing for easy communication across different parts of your code. Talkback has a unique feature: listeners (functions tied to a signal) can pass values back to the the sender.
+
+The library uses a conversation metaphor: *listeners* execute a function when a message is sent, and you can *say* a message to execute those functions.
 
 Examples
---------
+========
 ### Player controls example
 ```lua
 --in player.lua
@@ -29,42 +31,39 @@ topScore = conversation:say('get high score')
 drawText(topScore)
 ```
 
-API
----
-### Requiring the library
+Installation
+============
+To use the library, place talkback.lua in the root folder of your project or in a subfolder.
 ```lua
-talkback = require 'talkback'
+talkback = require 'talkback' -- if talkback.lua is in the root folder
+talkback = require 'path.to.talkback' -- if it's in a subfolder
 ```
 
-I always list how to do this but I don't know why.
-
-### Creating an event handler
+Usage
+=====
+### Creating a new conversation
 ```lua
 conversation = talkback.new()
 ```
-
-Event handlers (I call them conversations because it's cute) hold all of the listeners in a project. You'll probably only need one event handler in a project, but you can make as many as you want, I guess.
+**Conversations** contain and manage listeners. You'll probably only need one for your project, so keep this in a global variable.
 
 ### Creating a listener
 ```lua
-listener = conversation:listen(s, f)
+listener = conversation:listen(m, f)
 ```
-
-Creates a listener. A listener is a function tied to a signal, so whenever you send a signal, every listener with a matching signal will have their functions called.
-- `s` is the signal to look for. I always make them strings, but they can be anything.
+Creates a listener. A listener executes a function `f` when a certain message `m` sent.
+- `m` is the message to listen for. I always make them strings, but they can be anything.
 - `f` is the function to call when the signal is emitted.
 - Returns a handle to the listener. You'll want to keep this so you can remove the listener later.
 
-### Emitting a signal
+### Sending a message
 ```lua
 returnedValue1, returnedValue2, ... = conversation:say(s, ...)
 ```
-
-Sends a signal. All of the listeners with a matching signal will have their functions called with the given arguments. Conversation.say also returns all of the values returned by the listeners' functions (in the order that those listeners were created). If you don't know how many values are going to be returned and you want to store all of them, you can put those values in a table like so:
+Sends a message `s`. All of the listeners listening for that message will have their functions called with the given arguments. Conversation.say also returns all of the values returned by the listeners' functions (in the order that those listeners were created). If you don't know how many values are going to be returned and you want to store all of them, you can put those values in a table like so:
 ```lua
 returnedValues = {conversation:say(s, ...)}
 ```
-
 - `s` is the signal to look for. I always make them strings, but they can be anything.
 - `...` are arguments that will be passed to each listeners' function.
 - Returns the values returned by the listeners' functions.
@@ -73,9 +72,8 @@ returnedValues = {conversation:say(s, ...)}
 ```lua
 conversation:stopListening(listener)
 ```
-
-Disables the listener. The listener's function will no longer be called when a signal is emitted.
-- `listener` is the handle of the listener to disable.
+Disables the listener. The listener's function will no longer be called.
+- `listener` is the listener to disable.
 
 ### Listener groups
 You can create groups that hold multiple listeners:
@@ -97,3 +95,31 @@ conversation:stopListening(group)
 ```
 
 It's useful to make a group for each object that creates listeners, such as the player or enemies.
+
+Contributing
+============
+Feel free to open issues or pull requests! To run the tests, just run test.lua with any Lua interpreter.
+
+License
+=======
+The MIT License (MIT)
+
+Copyright (c) 2015 Andrew Minnich
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
