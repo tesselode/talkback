@@ -1,6 +1,6 @@
 Talkback
 --------
-**Talkback** is a tiny observer pattern library for Lua. It allows you to associate functions with messages that you can send from anywhere in your code, allowing for easy communication across different parts of your code. Talkback has a unique feature: listeners (functions tied to a signal) can pass values back to the the sender.
+**Talkback** is a tiny observer pattern library for Lua. It allows you to associate functions with messages that you can send from anywhere in your code, allowing for easy communication across different parts of your code. Talkback has a unique feature: listeners (which are functions tied to a message) can pass values back to the sender.
 
 The library uses a conversation metaphor: *listeners* execute a function when a message is sent, and you can *say* a message to execute those functions.
 
@@ -53,18 +53,18 @@ listener = conversation:listen(m, f)
 ```
 Creates a listener. A listener executes a function `f` when a certain message `m` sent.
 - `m` is the message to listen for. I always make them strings, but they can be anything.
-- `f` is the function to call when the signal is emitted.
+- `f` is the function to call when the message is sent.
 - Returns a handle to the listener. You'll want to keep this so you can remove the listener later.
 
 ### Sending a message
 ```lua
-returnedValue1, returnedValue2, ... = conversation:say(s, ...)
+returnedValue1, returnedValue2, ... = conversation:say(m, ...)
 ```
-Sends a message `s`. All of the listeners listening for that message will have their functions called with the given arguments. Conversation.say also returns all of the values returned by the listeners' functions (in the order that those listeners were created). If you don't know how many values are going to be returned and you want to store all of them, you can put those values in a table like so:
+Sends a message `m`. All of the listeners listening for that message will have their functions called with the given arguments. `Conversation.say` also returns all of the values returned by the listeners' functions (in the order that those listeners were created). If you don't know how many values are going to be returned and you want to store all of them, you can put those values in a table like so:
 ```lua
-returnedValues = {conversation:say(s, ...)}
+returnedValues = {conversation:say(m, ...)}
 ```
-- `s` is the signal to look for. I always make them strings, but they can be anything.
+- `m` is the message to look for. I always make them strings, but they can be anything.
 - `...` are arguments that will be passed to each listeners' function.
 - Returns the values returned by the listeners' functions.
 
@@ -79,7 +79,7 @@ Disables the listener. The listener's function will no longer be called.
 You can create groups that hold multiple listeners:
 ```lua
 group = conversation:newGroup()
-group:listen(s, f)
+group:listen(m, f)
 ```
 
 An example usage might look something like this:
