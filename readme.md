@@ -10,7 +10,7 @@ The library uses a conversation metaphor: *listeners* execute a function when a 
 ```lua
 --in player.lua
 shootListener = conversation:listen('player jump', function()
-  spawnBullet()
+  jump()
 end)
 
 --in input-manager.lua
