@@ -1,21 +1,21 @@
-Talkback
---------
+# Talkback
+
 **Talkback** is a tiny observer pattern library for Lua. It allows you to associate functions with messages that you can send from anywhere in your code, allowing for easy communication across different parts of your code. Talkback has a unique feature: listeners (which are functions tied to a message) can pass values back to the sender.
 
 The library uses a conversation metaphor: *listeners* execute a function when a message is sent, and you can *say* a message to execute those functions.
 
-Examples
-========
+## Examples
+
 ### Player controls example
 ```lua
 --in player.lua
-shootListener = conversation:listen('player shoot', function()
+shootListener = conversation:listen('player jump', function()
   spawnBullet()
 end)
 
 --in input-manager.lua
 if input.pressed('x') then
-  conversation:say('player shoot')
+  conversation:say('player jump')
 end
 ```
 
@@ -31,16 +31,16 @@ topScore = conversation:say('get high score')
 drawText(topScore)
 ```
 
-Installation
-============
+## Installation
+
 To use the library, place talkback.lua in the root folder of your project or in a subfolder.
 ```lua
 talkback = require 'talkback' -- if talkback.lua is in the root folder
 talkback = require 'path.to.talkback' -- if it's in a subfolder
 ```
 
-Usage
-=====
+## Usage
+
 ### Creating a new conversation
 ```lua
 conversation = talkback.new()
@@ -85,7 +85,7 @@ group:listen(m, f)
 An example usage might look something like this:
 ```lua
 group = conversation:newGroup()
-group:listen('player shoot', shoot)
+group:listen('player jump', jump)
 group:listen('player move', move)
 ```
 
@@ -96,12 +96,12 @@ conversation:stopListening(group)
 
 It's useful to make a group for each object that creates listeners, such as the player or enemies.
 
-Contributing
-============
+## Contributing
+
 Feel free to open issues or pull requests! To run the tests, just run test.lua with any Lua interpreter.
 
-License
-=======
+## License
+
 The MIT License (MIT)
 
 Copyright (c) 2015 Andrew Minnich
