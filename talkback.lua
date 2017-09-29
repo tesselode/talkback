@@ -1,14 +1,26 @@
-local talkback = {}
+local unpack = unpack or table.unpack
+
+local function filter(t, f)
+	for i = #t, 1, -1 do
+		if f(t[i]) then
+			table.remove(t, i)
+		end
+	end
+end
+
+local function remove(t, v)
+	for i = #t, 1, -1 do
+		if t[i] == v then
+			table.remove(t, i)
+			break
+		end
+	end
+end
 
 local Listener = {}
 
 function Listener:leave()
-	local listeners = self._parent._listeners
-	for i = #listeners, 1, -1 do
-		if listeners[i] == self then
-			table.remove(listeners, i)
-		end
-	end
+	remove(self._parent._listeners, self)
 end
 
 local Group = {}
@@ -24,48 +36,37 @@ function Group:listen(message, f)
 end
 
 function Group:say(message, ...)
-	local allResponses = {}
-	for i = 1, #self._groups do
-		local responses = {self._groups[i]:say(message, ...)}
-		for j = 1, #responses do
-			table.insert(allResponses, responses[j])
+	local responses = {}
+	for _, group in ipairs(self._groups) do
+		for _, response in ipairs {group:say(message, ...)} do
+			table.insert(responses, response)
 		end
 	end
-	for i = 1, #self._listeners do
-		if self._listeners[i]._message == message then
-			local responses = {self._listeners[i]._f(...)}
-			for j = 1, #responses do
-				table.insert(allResponses, responses[j])
+	for _, listener in pairs(self._listeners) do
+		if listener._message == message then
+			for _, response in ipairs {listener._f(...)} do
+				table.insert(responses, response)
 			end
 		end
 	end
-	return unpack(allResponses)
+	return unpack(responses)
 end
 
 function Group:leave()
-	local groups = self._parent._groups
-	for i = #groups, 1, -1 do
-		if groups[i] == self then
-			table.remove(groups, i)
-		end
+	if self._parent == Group then
+		error "can't call :leave() on a group without a parent"
 	end
+	remove(self._parent._groups, self)
 end
 
 function Group:ignore(message)
-	for i = #self._listeners, 1, -1 do
-		if self._listeners[i]._message == message then
-			table.remove(self._listeners, i)
-		end
-	end
+	filter(self._listeners, function(l)
+		return l._message == message
+	end)
 end
 
 function Group:reset()
-	for i = #self._groups, 1, -1 do
-		table.remove(self._groups, i)
-	end
-	for i = #self._listeners, 1, -1 do
-		table.remove(self._listeners, i)
-	end
+	self._groups, self._listeners = {}, {}
 end
 
 function Group:newGroup()
@@ -74,17 +75,10 @@ function Group:newGroup()
 		_groups = {},
 		_parent = self,
 	}, {__index = Group})
-	if self._groups then
+	if self ~= Group then
 		table.insert(self._groups, group)
 	end
 	return group
 end
 
-local baseGroup = Group:newGroup()
-function talkback.listen(...) return baseGroup:listen(...) end
-function talkback.say(...) return baseGroup:say(...) end
-function talkback.ignore(...) return baseGroup:ignore(...) end
-function talkback.reset(...) return baseGroup:reset(...) end
-function talkback.newGroup(...) return baseGroup:newGroup(...) end
-
-return talkback
+return Group:newGroup()
