@@ -1,0 +1,8 @@
+local group = talkback.newGroup()
+subGroup = group:newGroup()
+subSubGroup = subGroup:newGroup()
+listener = subGroup:listen(message, f)
+listener:leave()
+subGroup:say()
+subGroup:ignore(message)
+subGroup:reset()
