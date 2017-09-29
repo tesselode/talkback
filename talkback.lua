@@ -23,12 +23,14 @@ function Group:listen(message, f)
 	return listener
 end
 
-function Group:say(message)
+function Group:say(message, ...)
 	local allResponses = {}
 	for i = 1, #self._listeners do
-		local responses = {self._listeners[i].f(...)}
-		for j = 1, #reponses do
-			table.insert(allResponses, responses[j])
+		if #self._listeners[i]._message == message then
+			local responses = {self._listeners[i]._f(...)}
+			for j = 1, #responses do
+				table.insert(allResponses, responses[j])
+			end
 		end
 	end
 	return allResponses
@@ -58,7 +60,7 @@ function Group:reset()
 end
 
 function Group:newGroup()
-	return = setmetatable({
+	return setmetatable({
 		_listeners = {},
 		_groups = {},
 		_parent = self,
@@ -66,6 +68,8 @@ function Group:newGroup()
 end
 
 local baseGroup = Group:newGroup()
+
+talkback.baseGroup = baseGroup
 
 function talkback.listen(...) return baseGroup:listen(...) end
 function talkback.say(...) return baseGroup:say(...) end
