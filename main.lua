@@ -112,6 +112,10 @@ do
 	assert(responses[5] == 'the', "group:say() is returning responses from parent groups, somehow")
 end
 
+print 'all tests passed'
+
+love = love or {}
+
 function love.keypressed(key)
 	if key == 'escape' then
 		love.event.quit()
