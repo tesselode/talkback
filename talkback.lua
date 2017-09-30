@@ -60,6 +60,9 @@ function Group:leave()
 end
 
 function Group:ignore(message)
+  for _, group in ipairs(self._groups) do
+    group:ignore(message)
+  end
 	filter(self._listeners, function(l)
 		return l._message == message
 	end)

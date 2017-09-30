@@ -74,6 +74,14 @@ do
 	talkback:reset()
 	talkback:say 'hi'
 	assert(test == 10, "test failed: talkback:reset() doesn't remove groups")
+
+	group = talkback:newGroup()
+	group:listen('hi', function() test = test + 1 end)
+	talkback:say 'hi'
+	assert(test == 11, "test failed: listeners don't respond to group:say()")
+	talkback:ignore 'hi'
+	talkback:say 'hi'
+	assert(test == 11, "test failed: talkback:ignore() doesn't propogate to groups")
 end
 
 -- returns
