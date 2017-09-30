@@ -124,9 +124,9 @@ conversation:say 'greeting' -- now only prints "hello"
 
 ```lua
 group = conversation:newGroup()
+subGroup = group:newGroup()
+-- etc.
 ```
-
-Creates a new group as a child of the parent group (in this case, `conversation`).
 
 #### Removing groups
 
@@ -134,4 +134,4 @@ Creates a new group as a child of the parent group (in this case, `conversation`
 group:leave()
 ```
 
-*Note:* don't call `group:leave()` on the first group returned by talkback, as this will cause an error, since that group doesn't have a parent.
+*Note:* don't call `group:leave()` on the main Talkback group, as this will cause an error, since that group doesn't have a parent.
