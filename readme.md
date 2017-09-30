@@ -1,12 +1,11 @@
 # Talkback
 
-**Talkback** is a tiny observer pattern library for Lua. It allows you to associate functions with messages that you can send from anywhere in your code, allowing for easy communication across different parts of your code. Talkback has a unique feature: listeners (which are functions tied to a message) can pass values back to the sender.
-
-The library uses a conversation metaphor: *listeners* execute a function when a message is sent, and you can *say* a message to execute those functions.
+**Talkback** is a small Lua library that lets you create "conversations". You can send messages from within a conversation, and you can create listeners that will do something (and optionally send back a response) when they receive a certain message. This is a powerful organizational tool that allows different parts of your code to interact with each other.
 
 ## Examples
 
 ### Player controls example
+
 ```lua
 -- in main.lua
 conversation = require 'lib.talkback'
@@ -23,6 +22,7 @@ end
 ```
 
 ### High score display example
+
 ```lua
 -- in score-manager.lua
 conversation:listen('get high score', function(place)
@@ -37,6 +37,7 @@ drawText(topScore)
 ## Installation
 
 To use the library, place talkback.lua in the root folder of your project or in a subfolder, and load it with `require`.
+
 ```lua
 conversation = require 'talkback' -- if talkback.lua is in the root folder
 conversation = require 'path.to.talkback' -- if it's in a subfolder
@@ -104,7 +105,7 @@ conversation:reset()
 
 ### Groups
 
-Groups each hold their own set of listeners, and they can hold other groups. Groups can be nested infinitely, and `say`, `ignore`, and `reset` will apply to listeners in that group and child groups, but not parent groups. The library itself returns a group, meaning that `conversation` in the above examples is a group.
+You can create sub-groups from the main `conversation` group. When you say or ignore messages from inside a group, only that group (and child groups) will listen. Groups can be nested infinitely, and Talkback itself is a group.
 
 ```lua
 conversation = require 'talkback'
