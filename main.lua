@@ -88,13 +88,13 @@ end
 do
 	local group = talkback:newGroup()
 	local subGroup = group:newGroup()
-	subGroup:listen('hi', function()
+	talkback:listen('hi', function()
 		return 'somebody', 'once'
 	end)
 	group:listen('hi', function()
 		return 'told', 'me', 'the'
 	end)
-	talkback:listen('hi', function()
+	subGroup:listen('hi', function()
 		return 'world', 'is', 'gonna', 'roll', 'me'
 	end)
 
@@ -112,12 +112,15 @@ do
 	assert(responses[10] == 'me', "talkback:say doesn't return responses correctly")
 
 	local responses = {group:say 'hi'}
-	assert(#responses == 5, "group:say() is returning responses from parent groups, somehow")
-	assert(responses[1] == 'somebody', "group:say() is returning responses from parent groups, somehow")
-	assert(responses[2] == 'once', "group:say() is returning responses from parent groups, somehow")
-	assert(responses[3] == 'told', "group:say() is returning responses from parent groups, somehow")
-	assert(responses[4] == 'me', "group:say() is returning responses from parent groups, somehow")
-	assert(responses[5] == 'the', "group:say() is returning responses from parent groups, somehow")
+	assert(#responses == 8, "group:say() is returning responses from parent groups, somehow")
+	assert(responses[1] == 'told', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[2] == 'me', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[3] == 'the', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[4] == 'world', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[5] == 'is', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[6] == 'gonna', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[7] == 'roll', "group:say() is returning responses from parent groups, somehow")
+	assert(responses[8] == 'me', "group:say() is returning responses from parent groups, somehow")
 end
 
 print 'all tests passed'

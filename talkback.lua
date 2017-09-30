@@ -37,16 +37,16 @@ end
 
 function Group:say(message, ...)
 	local responses = {}
-	for _, group in ipairs(self._groups) do
-		for _, response in ipairs {group:say(message, ...)} do
-			table.insert(responses, response)
-		end
-	end
 	for _, listener in pairs(self._listeners) do
 		if listener._message == message then
 			for _, response in ipairs {listener._f(...)} do
 				table.insert(responses, response)
 			end
+		end
+	end
+	for _, group in ipairs(self._groups) do
+		for _, response in ipairs {group:say(message, ...)} do
+			table.insert(responses, response)
 		end
 	end
 	return unpack(responses)
