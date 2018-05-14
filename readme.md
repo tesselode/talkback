@@ -1,3 +1,5 @@
+**Warning**: This library is deprecated, and I no longer recommend using it. I recommend [beholder](https://github.com/kikito/beholder.lua) or [hump-signal](https://github.com/vrld/hump) if you need a good observer pattern library.
+
 # Talkback
 
 **Talkback** is a small Lua library that lets you create "conversations". You can send messages from within a conversation, and you can create listeners that will do something (and optionally send back a response) when they receive a certain message. This is a powerful organizational tool that allows different parts of your code to interact with each other.
